@@ -1,6 +1,6 @@
 # Ближайшие бары
 
-[FIXME. Здесь будет описание проекта]
+Скрипт определяет среди баров тот, в котором наибольшее количество мест, а так же тот, в котором наименьшее и ближайший к указанным координатам бар. В качестве результаты предоставляются параметры global_id соответсвующих баров.
 
 # Как запустить
 
@@ -11,7 +11,14 @@
 ```bash
 
 $ python bars.py # possibly requires call of python3 executive instead of just python
-# FIXME вывести пример ответа скрипта
+```
+Для точки с координатами 55.957956 с. ш. 37.440356 в.д. 
+
+```bash
+Tell please longitude and latitude: 37.440356 55.957956
+Biggest bar's global id: 169375059
+Smallest bar's global id: 20675518
+Closest bar's global id: 20661309
 
 ```
 
