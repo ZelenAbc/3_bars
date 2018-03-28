@@ -3,11 +3,14 @@ import json
 FILE_PATH = './bars.json'
 
 
+# load_data load data, therefore return 'data'. Which data we don't know yet.
+# Why param named data is bad in this case?
+
 def load_data(file_path):
     with open(file_path, 'r') as f:
         json_data = f.read()
-    data = json.loads(json_data)
-    return data
+    serializable_object = json.loads(json_data)
+    return serializable_object
 
 
 def get_distance_in_square_between_points(p1, p2):
