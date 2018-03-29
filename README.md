@@ -16,7 +16,17 @@
 
 ```bash
 # possibly requires call of python3 executive instead of just python
-$ python bars.py [-h] [-c L L] [-f DATA_FILE]
+$ python bars.py -h
+usage: bars.py [-h] [-c L L] [-f DATA_FILE]
+
+Choose the best bar for the evening :)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c L L, --coordinate L L
+                        longitude and latitude to find closest bar
+  -f DATA_FILE, --data_file DATA_FILE
+                        path to file with JSON data of bars
 ```
 Для точки с координатами 55.957956 с. ш. 37.440356 в. д. 
 
