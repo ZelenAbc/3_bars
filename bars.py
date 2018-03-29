@@ -1,7 +1,6 @@
 import json
 import argparse
 import os
-import sys
 
 
 class BadBarsData(Exception):
@@ -62,9 +61,8 @@ def get_position_from_keyboard():
             position_point = longitude, latitude
             break
         except ValueError:
-            print('Bad format, please, try again. Example: 55.754285')
-    if not position_point:
-        sys.exit()
+            ask_again = ', please, try again. Example: 55.754285' if try_number < try_to_input_count-1 else ''
+            print('Bad format {}\n'.format(ask_again))
     return position_point
 
 
@@ -152,15 +150,18 @@ def main():
         position_to_find_closest = get_position_from_args() or get_position_from_keyboard()
 
         biggest_bar = get_biggest_bar(bars_list)
-        smallest_bar = get_smallest_bar(bars_list)
-        closest_bar = get_closest_bar(bars_list, *position_to_find_closest)
-
         print('Biggest bar: ')
         print(show_bar(biggest_bar))
+
+        smallest_bar = get_smallest_bar(bars_list)
         print('Smallest bar: ')
         print(show_bar(smallest_bar))
-        print('Closest bar: ')
-        print(show_bar(closest_bar))
+
+        if position_to_find_closest:
+            closest_bar = get_closest_bar(bars_list, *position_to_find_closest)
+            print('Closest bar: ')
+            print(show_bar(closest_bar))
+
     except BadBarsData:
         error_message = 'Data from {file} has format mistakes. Check and try again, please'
         print(error_message.format(file=get_data_file_path()))
