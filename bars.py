@@ -31,7 +31,7 @@ class FileExist(argparse.Action):
 
 def get_arg_parser():
     default_file_path = './bars.json'
-    arg_parser = argparse.ArgumentParser(description='')
+    arg_parser = argparse.ArgumentParser(description='Choose the best bar for the evening :)')
     arg_parser.add_argument('-c', '--coordinate', metavar='L', type=float, nargs=2,
                             help='longitude and latitude to find closest bar')
     arg_parser.add_argument('-f', '--data_file', action=FileExist, default=default_file_path,
@@ -50,15 +50,19 @@ def get_position_from_args():
 
 
 def get_position_from_keyboard():
+    position_point = None
+    try_to_input_count = 3
     print("Tell please longitude and latitude to find closest bar")
-    while True:
+    for i in range(try_to_input_count):
         try:
             longitude = float(input('longitude: '))
             latitude = float(input('latitude: '))
+            position_point = longitude, latitude
             break
         except ValueError:
             print('Bad format, please, try again. Example: 55.754285')
-    position_point = longitude, latitude
+    if not position_point:
+        sys.exit()
     return position_point
 
 
