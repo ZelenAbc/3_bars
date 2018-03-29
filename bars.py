@@ -32,9 +32,11 @@ class FileExist(argparse.Action):
 def get_arg_parser():
     default_file_path = './bars.json'
     arg_parser = argparse.ArgumentParser(description='Choose the best bar for the evening :)')
-    arg_parser.add_argument('-c', '--coordinate', metavar='L', type=float, nargs=2,
+    arg_parser.add_argument('-c', '--coordinate',
+                            metavar='L', type=float, nargs=2,
                             help='longitude and latitude to find closest bar')
-    arg_parser.add_argument('-f', '--data_file', action=FileExist, default=default_file_path,
+    arg_parser.add_argument('-f', '--data_file',
+                            action=FileExist, default=default_file_path,
                             help='path to file with JSON data of bars')
     return arg_parser
 
