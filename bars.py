@@ -55,7 +55,7 @@ def get_position_from_keyboard():
     position_point = None
     try_to_input_count = 3
     print("Tell please longitude and latitude to find closest bar")
-    for i in range(try_to_input_count):
+    for try_number in range(try_to_input_count):
         try:
             longitude = float(input('longitude: '))
             latitude = float(input('latitude: '))
@@ -71,9 +71,7 @@ def get_position_from_keyboard():
 def get_bar_position(bar):
     try:
         bar_position = bar['geometry']['coordinates']
-    except TypeError:
-        raise BadBarsData
-    except KeyError:
+    except (TypeError, KeyError):
         raise BadBarsData
     else:
         return bar_position
@@ -97,9 +95,7 @@ def get_distance_in_square_between_points(p1, p2):
 def get_bar_size(bar):
     try:
         bar_size = bar['properties']['Attributes']['SeatsCount']
-    except TypeError:
-        raise BadBarsData
-    except KeyError:
+    except (TypeError, KeyError):
         raise BadBarsData
     else:
         return bar_size
@@ -123,9 +119,7 @@ def get_bars():
     bars_data = load_serializable_object_from_file(path_to_file_with_bars_data)
     try:
         bars = bars_data['features']
-    except TypeError:
-        raise BadBarsData
-    except KeyError:
+    except (TypeError, KeyError):
         raise BadBarsData
     else:
         return bars
@@ -143,23 +137,18 @@ def get_list_of_phone_numbers(phones):
 def show_bar(bar):
     bar_info = '\t\t"{name}"\n\t{address}\n\t{tel}\n'
     try:
-        name = bar['properties']['Attributes']['Name']
-        address = bar['properties']['Attributes']['Address']
-        phones = get_list_of_phone_numbers(bar['properties']['Attributes']['PublicPhone'])
-    except Exception:
+        bar_title = bar['properties']['Attributes']['Name']
+        bar_address = bar['properties']['Attributes']['Address']
+        bar_phones = get_list_of_phone_numbers(bar['properties']['Attributes']['PublicPhone'])
+    except (TypeError, KeyError):
         raise BadBarsData
-    tel = '\n'.join(phones)
-    return bar_info.format(name=name, address=address, tel=tel)
+    tel = '\n'.join(bar_phones)
+    return bar_info.format(name=bar_title, address=bar_address, tel=tel)
 
 
 def main():
     try:
         bars_list = get_bars()
-    except BadBarsData:
-        error_message = 'Data from {file} cannot be analyzed. Check and try again, please'
-        print(error_message.format(file=get_data_file_path()))
-        sys.exit()
-    else:
         position_to_find_closest = get_position_from_args() or get_position_from_keyboard()
 
         biggest_bar = get_biggest_bar(bars_list)
@@ -172,6 +161,9 @@ def main():
         print(show_bar(smallest_bar))
         print('Closest bar: ')
         print(show_bar(closest_bar))
+    except BadBarsData:
+        error_message = 'Data from {file} has format mistakes. Check and try again, please'
+        print(error_message.format(file=get_data_file_path()))
 
 
 if __name__ == '__main__':
