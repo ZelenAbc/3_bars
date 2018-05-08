@@ -7,35 +7,26 @@ class BadBarsData(Exception):
     pass
 
 
-class FileExist(argparse.Action):
-    def __call__(self, parser, namespace, values, option_string=None):
-        prospective_path_to_file = values
-        class_name = self.__class__.__name__
-        err_mes_template = '{class_name}: {path} {problem}'
-        if not os.path.isfile(prospective_path_to_file):
-            problem_description = 'is not valid path'
-            err_mes = err_mes_template.format(class_name=class_name,
-                                              path=prospective_path_to_file,
-                                              problem=problem_description)
-            raise argparse.ArgumentTypeError(err_mes)
-        if os.access(prospective_path_to_file, os.R_OK):
-            setattr(namespace, self.dest, prospective_path_to_file)
-        else:
-            problem_description = 'is not a readable file'
-            err_mes = err_mes_template.format(class_name=class_name,
-                                              path=prospective_path_to_file,
-                                              problem=problem_description)
-            raise argparse.ArgumentTypeError(err_mes)
+def try_open_file(parser, arg):
+    if not os.path.exists(arg):
+        parser.error("The file %s does not exist!" % arg)
+    else:
+        return open(arg, 'r')
 
 
 def get_arg_parser():
     default_file_path = './bars.json'
     arg_parser = argparse.ArgumentParser(description='Choose the best bar for the evening :)')
-    arg_parser.add_argument('-c', '--coordinate',
-                            metavar='L', type=float, nargs=2,
+    arg_parser.add_argument('-c',
+                            '--coordinate',
+                            metavar='L',
+                            type=float,
+                            nargs=2,
                             help='longitude and latitude to find closest bar')
-    arg_parser.add_argument('-f', '--data_file',
-                            action=FileExist, default=default_file_path,
+    arg_parser.add_argument('-f',
+                            '--data_file',
+                            action=FileExist,
+                            default=default_file_path,
                             help='path to file with JSON data of bars')
     return arg_parser
 
